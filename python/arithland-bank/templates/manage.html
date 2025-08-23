@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Manage Competition</div>
+                <div class="card-body">
+                    <form
+                            action="{% url "manage" %}"
+                            method="post"
+                            onsubmit="return confirm('Doing this result in destroying all data from last competition, are you sure?');"
+                    >
+                        {% csrf_token %}
+                        {% bootstrap_form form layout="horizontal" horizontal_label_class="col-md-4" horizontal_field_class="col-md-8" %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,8 @@
+- name: Deploy Arithland Bank Service
+  hosts: all
+  tasks:
+    - name: Deploy using docker compose
+      include_tasks: ../../macros/deploy-compose.yaml
+      vars:
+        env_file_path: "{{ env_file_path }}"
+        application: "infra/postgres"

@@ -1,0 +1,7 @@
+all: true
+mockname: "Mock{{.InterfaceName}}"
+outpkg: "{{.PackageName}}mocks"
+filename: "{{.InterfaceName}}_mock.go"
+dir: '{{.InterfaceDir}}/{{.PackageName}}mocks'
+packages:
+  "github.com/avistopia/monorepo/go/arithland-telegram/internal/pkg/clients": {}

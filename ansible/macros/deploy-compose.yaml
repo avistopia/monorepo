@@ -1,0 +1,23 @@
+- name: Clone repository
+  become: true
+  git:
+    repo: 'https://github.com/avistopia/monorepo.git'
+    dest: /home/ubuntu/monorepo
+    version: main
+    force: yes
+
+- name: Read env file from local machine
+  ansible.builtin.slurp:
+    src: "{{ env_file_path }}"
+  register: env_file
+  delegate_to: localhost
+
+- name: Build and start containers (force recreate)
+  become: true
+  community.docker.docker_compose_v2:
+    project_src: /home/ubuntu/monorepo/{{ application }}
+    build: always
+    recreate: always
+    remove_orphans: true
+    state: present
+  environment: "{{ dict((env_file.content | b64decode).split('\n') | select('match', '^.+=.+$') | map('split', '=', 2) | list) }}"

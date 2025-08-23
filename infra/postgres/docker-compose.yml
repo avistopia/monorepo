@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: ${ROOT_USER}
+      POSTGRES_PASSWORD: ${ROOT_PASSWORD}
+      ARITHLAND_BANK_DB_NAME: ${ARITHLAND_BANK_DB_NAME}
+      ARITHLAND_BANK_DB_USER: ${ARITHLAND_BANK_DB_USER}
+      ARITHLAND_BANK_DB_PASS: ${ARITHLAND_BANK_DB_PASS}
+      ARITHLAND_TELEGRAM_DB_NAME: ${ARITHLAND_TELEGRAM_DB_NAME}
+      ARITHLAND_TELEGRAM_DB_USER: ${ARITHLAND_TELEGRAM_DB_USER}
+      ARITHLAND_TELEGRAM_DB_PASS: ${ARITHLAND_TELEGRAM_DB_PASS}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
+    ports:
+      - "15432:5432"
+    networks:
+      - db_network
+
+volumes:
+  db_data:
+
+networks:
+  db_network:
+    name: db_network

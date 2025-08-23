@@ -1,0 +1,15 @@
+name: "Setup Ansible"
+description: "Setup Ansible"
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Python
+      uses: ./.github/actions/setups/python
+
+    - name: Install Ansible
+      shell: bash
+      run: pip install --upgrade pip && pip install ansible
+
+    - name: Init Ansible
+      shell: bash
+      run: make init-ansible

@@ -1,0 +1,17 @@
+- name: Deploy Arithland Bank Service
+  hosts: all
+  tasks:
+    - name: Ensure static directory exists
+      become: true
+      file:
+        path: /var/www/html/arithland_bank
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Deploy using docker compose
+      include_tasks: ../../macros/deploy-compose.yaml
+      vars:
+        env_file_path: "{{ env_file_path }}"
+        application: "python/arithland-bank"

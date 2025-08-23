@@ -1,0 +1,20 @@
+name: Lint & Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Python Lint & Test
+        uses: ./.github/actions/python/lint-test
+
+      - name: Golang Lint & Test
+        uses: ./.github/actions/go/lint-test

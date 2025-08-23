@@ -1,0 +1,15 @@
+name: "Python Lint & Test"
+description: "Runs lint and test for Python"
+runs:
+  using: "composite"
+  steps:
+    - name: Setup
+      uses: ./.github/actions/setups/python
+
+    - name: Lint
+      shell: bash
+      run: cd python && make lint
+
+    - name: Test
+      shell: bash
+      run: cd python && make test

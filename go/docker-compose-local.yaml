@@ -1,0 +1,10 @@
+services:
+  dev:
+    image: golang:1.24.6
+    volumes:
+      - ./:/app
+      - go_mod_cache:/go/pkg/mod
+    working_dir: /app
+    command: tail -f /dev/null
+volumes:
+  go_mod_cache:

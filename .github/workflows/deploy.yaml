@@ -1,0 +1,42 @@
+name: Deploy Application
+
+on:
+  workflow_dispatch:
+    inputs:
+      application:
+        description: 'Select Application'
+        required: true
+        type: choice
+        options:
+          - go/arithland-telegram
+          - python/arithland-bank
+          - infra/nginx
+          - infra/postgres
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Ansible
+        uses: ./.github/actions/setups/ansible
+
+      - name: Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: me-central-1
+          ANSIBLE_HOST_KEY_CHECKING: False
+        run: |
+          aws secretsmanager get-secret-value --secret-id ${{ github.event.inputs.application }}/production --query SecretString --output text > $RUNNER_TEMP/.env
+
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > $RUNNER_TEMP/ssh_key
+          chmod 600 $RUNNER_TEMP/ssh_key
+
+          set -o allexport; source $RUNNER_TEMP/.env; set +o allexport;
+          ansible-playbook ansible/deploy/${{ github.event.inputs.application }}.yaml -i "${{ secrets.HOSTNAME }}," --key-file $RUNNER_TEMP/ssh_key --user ubuntu -e "env_file_path=$RUNNER_TEMP/.env"
+
+          rm -f $RUNNER_TEMP/.env
+          rm -f $RUNNER_TEMP/ssh_key

@@ -1,0 +1,15 @@
+name: "Golang Lint & Test"
+description: "Runs lint and test for Golang"
+runs:
+  using: "composite"
+  steps:
+    - name: Setup
+      uses: ./.github/actions/setups/go
+
+    - name: Lint
+      shell: bash
+      run: cd go && make autogen && make install-lint && make lint
+
+    - name: Test
+      shell: bash
+      run: cd go && make autogen && make test

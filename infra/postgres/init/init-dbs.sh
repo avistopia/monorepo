@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+
+# Array of DB identifiers (matching your env var prefixes)
+DBS=("ARITHLAND_BANK" "ARITHLAND_TELEGRAM")
+
+for PREFIX in "${DBS[@]}"; do
+    DB_NAME_VAR="${PREFIX}_DB_NAME"
+    DB_USER_VAR="${PREFIX}_DB_USER"
+    DB_PASS_VAR="${PREFIX}_DB_PASS"
+
+    DB_NAME="${!DB_NAME_VAR}"
+    DB_USER="${!DB_USER_VAR}"
+    DB_PASS="${!DB_PASS_VAR}"
+
+    echo "Creating user $DB_USER and database $DB_NAME..."
+
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+        CREATE USER "$DB_USER" WITH PASSWORD '${DB_PASS}';
+        CREATE DATABASE "$DB_NAME" OWNER "$DB_USER";
+        GRANT ALL PRIVILEGES ON DATABASE "$DB_NAME" TO "$DB_USER";
+EOSQL
+
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname="$DB_NAME" <<-EOSQL
+        GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO "$DB_USER";
+        GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO "$DB_USER";
+        ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO "$DB_USER";
+        ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO "$DB_USER";
+EOSQL
+
+done
