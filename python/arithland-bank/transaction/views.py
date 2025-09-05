@@ -151,6 +151,9 @@ def transactions_view(request):
         if "recorded_by" in form.cleaned_data and form.cleaned_data["recorded_by"]:
             transactions = transactions.filter(recorded_by=form.cleaned_data["recorded_by"])
 
+        if "is_for_interest" in form.cleaned_data and form.cleaned_data["is_for_interest"]:
+            transactions = transactions.filter(is_for_interest=True)
+
     return render(
         request,
         "transactions.html",
