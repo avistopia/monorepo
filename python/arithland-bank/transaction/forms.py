@@ -128,7 +128,7 @@ class TransactionForm(forms.Form):
 class TransactionFilterForm(forms.Form):
     team_number = forms.IntegerField(required=False)
     recorded_by = forms.ModelChoiceField(queryset=User.objects.all(), required=False)
-    is_for_interest = forms.BooleanField()
+    is_for_interest = forms.BooleanField(required=False)
 
 
 class CompetitionSelectionNavbarForm(forms.Form):
