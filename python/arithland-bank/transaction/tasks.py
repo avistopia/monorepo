@@ -30,6 +30,14 @@ def check():
                 is_for_interest=True,
             ).exists()
             if not interest_added:
+                logger.info(
+                    "adding interest for team %s competition %s, start time %s, end time %s",
+                    team.team_number,
+                    competition.slug,
+                    interest_range_start_time,
+                    interest_range_end_time,
+                )
+
                 try:
                     add_interest(team)
                     logger.info(
