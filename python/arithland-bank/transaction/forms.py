@@ -10,6 +10,10 @@ User = get_user_model()
 
 
 class TransactionForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request", None)
+        super().__init__(*args, **kwargs)
+
     team_number = forms.IntegerField(
         required=True,
         widget=forms.NumberInput(attrs={"placeholder": "شماره تیم"}),
@@ -69,7 +73,7 @@ class TransactionForm(forms.Form):
         team_number = self.cleaned_data["team_number"]
 
         try:
-            team = Team.objects.get(team_number=team_number)
+            team = Team.objects.get(competition_id=self.request.user.competition_id, team_number=team_number)
         except Team.DoesNotExist:
             raise ValidationError({"team_number": f"team number {team_number} does not exist"})
 

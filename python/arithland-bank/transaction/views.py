@@ -72,12 +72,15 @@ def dashboard_view(request):
     recent_transactions = Transaction.objects.filter(recorded_by=request.user).order_by("-id")[:4]
 
     if request.method == "POST":
-        form = TransactionForm(request.POST)
+        form = TransactionForm(request.POST, request=request)
         if form.is_valid():
             # TODO prompt when doing loan
             perform_transaction(
                 user=request.user,
-                team_number=form.cleaned_data["team_number"],
+                team=Team.objects.get(
+                    competition_id=request.user.competition_id,
+                    team_number=form.cleaned_data["team_number"],
+                ),
                 amount=form.cleaned_data.get("amount") or 0,
                 easy=form.cleaned_data.get("easy") or 0,
                 medium=form.cleaned_data.get("medium") or 0,
@@ -90,7 +93,7 @@ def dashboard_view(request):
                 request,
                 "dashboard.html",
                 {
-                    "form": TransactionForm(),
+                    "form": TransactionForm(request=request),
                     "ui": form_ui,
                     "recent_transactions": recent_transactions,
                 },
@@ -110,7 +113,7 @@ def dashboard_view(request):
         request,
         "dashboard.html",
         {
-            "form": TransactionForm(),
+            "form": TransactionForm(request=request),
             "ui": form_ui,
             "recent_transactions": recent_transactions,
         },
@@ -182,7 +185,7 @@ def teams_get_balance_by_number_api_view(request):
         return JsonResponse({"value": ""})
 
     try:
-        team = Team.objects.get(team_number=data["team_number"])
+        team = Team.objects.get(competition_id=request.user.competition_id, team_number=data["team_number"])
     except Team.DoesNotExist:
         return JsonResponse({"value": ""})
 
