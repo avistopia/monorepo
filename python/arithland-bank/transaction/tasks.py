@@ -30,12 +30,19 @@ def check():
                 is_for_interest=True,
             ).exists()
             if not interest_added:
-                add_interest(team)
-                logger.info(
-                    "calculated and deposited interest for team %s competition %s",
-                    team.team_number,
-                    competition.slug,
-                )
+                try:
+                    add_interest(team)
+                    logger.info(
+                        "calculated and deposited interest for team %s competition %s",
+                        team.team_number,
+                        competition.slug,
+                    )
+                except Exception:
+                    logger.exception(
+                        "failed to calculate and deposit interest for team %s competition %s",
+                        team.team_number,
+                        competition.slug,
+                    )
 
 
 def run_continuously(self, interval=1):
