@@ -16,6 +16,8 @@ services:
       DATABASE_DSN: ${DATABASE_DSN}
     networks:
       - db_network
+    labels:
+      - "logging=promtail"
 
 networks:
   db_network:

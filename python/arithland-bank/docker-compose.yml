@@ -24,6 +24,8 @@ services:
       - /var/www/html/arithland_bank/static:/app/staticfiles
     networks:
       - db_network
+    labels:
+      - "logging=promtail"
 
 networks:
   db_network:

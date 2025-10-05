@@ -12,6 +12,7 @@ on:
           - python/arithland-bank
           - infra/nginx
           - infra/postgres
+          - infra/grafana
 
 jobs:
   deploy:
