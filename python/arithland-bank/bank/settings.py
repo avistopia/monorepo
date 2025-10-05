@@ -177,16 +177,6 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
-        "django.request": {
-            "handlers": ["null"],
-            "level": "ERROR",
-            "propagate": False,
-        },
-        "django.security.DisallowedHost": {
-            "handlers": ["null"],
-            "level": "ERROR",
-            "propagate": False,
-        },
     },
 }
 
@@ -195,3 +185,8 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1",
     "http://localhost",
 ]
+
+import logging  # noqa: E402
+
+logging.getLogger("django.request").handlers = [logging.NullHandler()]
+logging.getLogger("django.security.DisallowedHost").handlers = [logging.NullHandler()]
