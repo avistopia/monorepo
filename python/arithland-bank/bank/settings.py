@@ -177,6 +177,14 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
+        "django.request": {
+            "handlers": ["null"],
+            "propagate": False,
+        },
+        "django.security.DisallowedHost": {
+            "handlers": ["null"],
+            "propagate": False,
+        },
     },
 }
 

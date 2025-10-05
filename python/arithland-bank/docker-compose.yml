@@ -5,6 +5,11 @@ services:
       dockerfile: arithland-bank/Dockerfile
     container_name: arithland_bank_service
     restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
     environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
       DJANGO_DEBUG: ${DJANGO_DEBUG}
