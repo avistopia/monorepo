@@ -179,10 +179,12 @@ LOGGING = {
         },
         "django.request": {
             "handlers": ["null"],
+            "level": "ERROR",
             "propagate": False,
         },
         "django.security.DisallowedHost": {
             "handlers": ["null"],
+            "level": "ERROR",
             "propagate": False,
         },
     },
