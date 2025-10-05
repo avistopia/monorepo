@@ -5,7 +5,7 @@ server:
 
 ingester:
   wal:
-    enabled: true
+    enabled: false
   lifecycler:
     ring:
       kvstore:
